@@ -111,4 +111,10 @@ class StreamerLSL():
         board_thread.daemon = True  # will stop on exit
         board_thread.start()
         print("Streaming data...")
-        board_thread.join()
+
+        while True:
+            s = input('--> ')
+            if s == '/stop':
+                break
+
+        self.board.stop()
