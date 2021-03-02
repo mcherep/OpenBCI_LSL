@@ -22,11 +22,6 @@ class StreamerLSL():
         self.eeg_channels = self.board.getNbEEGChannels()
         self.sample_rate = self.board.getSampleRate()
 
-        flags = 'svd'
-
-        for f in flags:
-            self.board.ser.write(bytes(f, 'utf-8'))
-
         if self.board.daisy:
             s = 'C'
         else:
