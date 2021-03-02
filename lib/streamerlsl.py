@@ -118,3 +118,4 @@ class StreamerLSL():
                 break
 
         self.board.stop()
+        time.sleep(2)
