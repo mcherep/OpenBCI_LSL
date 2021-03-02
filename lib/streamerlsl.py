@@ -36,10 +36,11 @@ class StreamerLSL():
 
     def init_board_settings(self, gain):
         # Generate the settings with the gain for each channel
-        for chan_id in self.eeg_channels:
+        settings = ""
+        for chan_id in range(self.eeg_channels):
             settings += f"x{self.CHANNELS[chan_id]}0{self.GAINS.index(gain)}0110X"
         for byte in settings:
-            self.board.ser.write(byte)
+            self.board.ser.write(bytes(byte, 'utf-8'))
             time.sleep(.2)
 
     def send(self, sample):
