@@ -41,7 +41,6 @@ class StreamerLSL():
             settings += f"x{self.CHANNELS[chan_id]}0{self.GAINS.index(gain)}0110X"
         for byte in settings:
             self.board.ser.write(bytes(byte, 'utf-8'))
-            time.sleep(.2)
 
     def send(self, sample):
         try:
