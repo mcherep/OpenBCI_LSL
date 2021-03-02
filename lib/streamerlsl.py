@@ -22,6 +22,11 @@ class StreamerLSL():
         self.eeg_channels = self.board.getNbEEGChannels()
         self.sample_rate = self.board.getSampleRate()
 
+        flags = 'svd'
+
+        for f in flags:
+            self.board.ser.write(bytes(f, 'utf-8'))
+
         if self.board.daisy:
             s = 'C'
         else:
@@ -30,24 +35,12 @@ class StreamerLSL():
         self.board.ser.write(bytes(s, 'utf-8'))
 
     def init_board_settings(self, gain):
-        # set board configuration
-        for i in range(self.eeg_channels):
-            current = "channel{}".format(i+1)
-            self.settings[current] = []
-            self.settings[current].append(b'x')
-            self.settings[current].append(self.CHANNELS[i].encode())
-            self.settings[current].append(b'0')
-            self.settings[current].append(str(self.GAINS.index(gain)).encode())
-            self.settings[current].append(b'0')
-            self.settings[current].append(b'1')
-            self.settings[current].append(b'1')
-            self.settings[current].append(b'0')
-            self.settings[current].append(b'X')
-
-        for item in self.settings:
-            for byte in self.settings[item]:
-                self.board.ser.write(byte)
-                time.sleep(.2)
+        # Generate the settings with the gain for each channel
+        for chan_id in self.eeg_channels:
+            settings += f"x{self.CHANNELS[chan_id]}0{self.GAINS.index(gain)}0110X"
+        for byte in settings:
+            self.board.ser.write(byte)
+            time.sleep(.2)
 
     def send(self, sample):
         try:
